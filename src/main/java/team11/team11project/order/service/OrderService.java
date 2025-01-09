@@ -17,6 +17,7 @@ import team11.team11project.order.dto.CreateOrderResponse;
 import team11.team11project.order.dto.UpdateOrderRequest;
 import team11.team11project.order.dto.UpdateOrderResponse;
 import team11.team11project.order.repository.OrderRepository;
+import team11.team11project.user.model.response.OrderMemberResponse;
 import team11.team11project.user.repository.MemberRepository;
 
 import java.time.LocalTime;
@@ -58,7 +59,9 @@ public class OrderService {
 
         Orders savedOrder = orderRepository.save(order);
 
-        return new CreateOrderResponse("주문 생성", savedOrder.getId());
+        OrderMemberResponse memberResponse = new OrderMemberResponse(savedOrder.getCustomer().getMemberName());
+
+        return new CreateOrderResponse(savedOrder.getId(),savedOrder.getOrderStatus(),savedOrder.getQuantity(), memberResponse);
     }
 
     // ::: 주문 상태 변경 서비스
@@ -79,6 +82,6 @@ public class OrderService {
 
         foundOrder.UpdateOrderStatus(request.getOrderStatus());
 
-        return new UpdateOrderResponse("주문 상태 변경 완료!");
+        return new UpdateOrderResponse(foundOrder.getId(), foundOrder.getOrderStatus());
     }
 }

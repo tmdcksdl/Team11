@@ -7,13 +7,9 @@ import lombok.Getter;
 @Getter
 public class LoginDto {
 
-    private String message;
     private String token;
 
-    public static LoginDto convertDto(String message, String token) {
-        return new LoginDto(
-                message,
-                token
-        );
+    public static LoginDto convertDto(String token) {
+        return new LoginDto(token);
     }
 }

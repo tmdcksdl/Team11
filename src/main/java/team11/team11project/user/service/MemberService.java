@@ -52,6 +52,6 @@ public class MemberService {
         // 유저 검증을 마쳤다면 토큰 생성해서 반환해줌.
         String token = jwtUtil.generateToken(member.getId(), member.getMemberName(), member.getUserRole());
 
-        return LoginDto.convertDto("로그인 성공", token);
+        return LoginDto.convertDto(token);
     }
 }

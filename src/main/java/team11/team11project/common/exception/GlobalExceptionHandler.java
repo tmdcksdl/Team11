@@ -62,4 +62,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ExceptionResponse(e.getMessage(), HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
 
     }
+
+    @ExceptionHandler(ReviewNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleReviewNotAllowedException(ReviewNotAllowedException e) {
+        log.error("오류 메시지 : {}", e.getMessage());
+        return new ResponseEntity<>(new ExceptionResponse(e.getMessage(), HttpStatus.CONFLICT.value()), HttpStatus.CONFLICT);
+    }
 }

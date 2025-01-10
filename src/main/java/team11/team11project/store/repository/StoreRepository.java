@@ -11,6 +11,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("select count(s) from Store s where s.owner.id = :ownerId")
     int findStoresByMemberId(Long ownerId);
 
-    @Query("select s from Store s WHERE s.name = :name")
+    @Query("select s from Store s WHERE s.name like %:name%")
     Page<Store> findStoresByName(String name, Pageable pageable);
 }

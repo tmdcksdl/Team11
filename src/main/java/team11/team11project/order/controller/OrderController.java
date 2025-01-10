@@ -1,5 +1,6 @@
 package team11.team11project.order.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class OrderController {
     // ::: 주문 생성 API
     @PostMapping
     @AuthCheck("CUSTOMER")
-    public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
+    public ResponseEntity<CreateOrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
 
         CreateOrderResponse orderResponse = orderService.save(request);
 
@@ -36,7 +37,7 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     @AuthCheck("OWNER")
     public ResponseEntity<UpdateOrderResponse> updateOrderStatus(
-            @PathVariable Long orderId,
+            @Valid @PathVariable Long orderId,
             @RequestBody UpdateOrderRequest request
     ) {
 

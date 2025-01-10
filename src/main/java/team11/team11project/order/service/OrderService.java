@@ -81,10 +81,11 @@ public class OrderService {
             throw new InvalidOrderStatusChangeException("주문 상태를 변경할 수 없습니다.");
         }
 
-        // 주문 수락, 배달중인 상태에서 주문 취소 상태로 변경할 경우 예외 처리
-        if ((foundOrder.getOrderStatus() == OrderStatus.ACCEPTED || foundOrder.getOrderStatus() == OrderStatus.DELIVERY)
-                && request.getOrderStatus() == OrderStatus.CANCELED) {
-            throw new InvalidOrderStatusChangeException("주문을 취소할 수 없습니다.");
+        // 주문 수락, 배달중인 상태에서 주문 취소 상태로 변경할 경우 예외 처리, ACCPETED, DELIVERY 중에서는 CANCLED로 못감
+        if (foundOrder.getOrderStatus() == OrderStatus.ACCEPTED || foundOrder.getOrderStatus() == OrderStatus.DELIVERY) {
+            if (request.getOrderStatus() == OrderStatus.CANCELED) {
+                throw new InvalidOrderStatusChangeException("주문을 취소할 수 없습니다.");
+            }
         }
 
         // 주문 상태를 전 단계로 되돌아갈 경우 예외 처리

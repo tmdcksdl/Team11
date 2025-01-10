@@ -1,6 +1,7 @@
 package team11.team11project.store.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class StoreController {
     @PostMapping
     @AuthCheck("OWNER")
     public ResponseEntity<StoreResponse> createStore(
-            @RequestBody CreateStoreRequest storeRequest,
+            @Valid @RequestBody CreateStoreRequest storeRequest,
             HttpServletRequest request
     ) {
 
@@ -42,18 +43,20 @@ public class StoreController {
 
     // ::: 가게 조회(다건) API
     @GetMapping
+    @AuthCheck({"OWNER", "CUSTOMER"})
     public ResponseEntity<Page<StoreResponse>> findAllStore(
             @PageableDefault(size = 10, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam String name
+            @RequestParam String storeName
     ) {
 
-        Page<StoreResponse> allStore = storeService.findAllStore(pageable, name);
+        Page<StoreResponse> allStore = storeService.findAllStore(pageable, storeName);
 
         return new ResponseEntity<>(allStore, HttpStatus.OK);
     }
 
     // ::: 가게 조회(단건) API - merge 후 메뉴 확인하면서 생성 예정
     @GetMapping("/{storeId}")
+    @AuthCheck({"OWNER", "CUSTOMER"})
     public ResponseEntity<OneStoreResponse> findOneStore(
             @PathVariable Long storeId
     ) {
@@ -66,8 +69,9 @@ public class StoreController {
 
     // ::: 가게 수정 API
     @PutMapping("/{storeId}")
+    @AuthCheck("OWNER")
     public ResponseEntity<StoreResponse> updateStore(
-            @PathVariable Long storeId,
+            @Valid @PathVariable Long storeId,
             @RequestBody UpdateStoreRequest storeRequest,
             HttpServletRequest request
     ) {
@@ -79,8 +83,9 @@ public class StoreController {
 
     // ::: 가게 페업 API
     @DeleteMapping("/{storeId}")
+    @AuthCheck("OWNER")
     public ResponseEntity<Void> deleteStore(
-            @PathVariable Long storeId,
+            @Valid @PathVariable Long storeId,
             HttpServletRequest request
     ) {
 
